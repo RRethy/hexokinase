@@ -3,16 +3,16 @@ package parser
 import (
 	"bufio"
 	"fmt"
-	"github.com/rrethy/hexokinase/internal/colour"
+	"github.com/rrethy/hexokinase/internal/models"
 	"os"
 )
 
-type patParser (func(string, int) []*colour.Colour)
+type patParser (func(string, int) []*models.Colour)
 
 // Parse TODO
 func Parse(in *os.File, out *os.File) {
 	scanner := bufio.NewScanner(in)
-	var colours []*colour.Colour
+	var colours []*models.Colour
 	parsers := [](patParser){
 		parseHex,
 		parseRGB,

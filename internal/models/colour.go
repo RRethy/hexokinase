@@ -1,4 +1,4 @@
-package colour
+package models
 
 import (
 	"fmt"

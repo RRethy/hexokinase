@@ -1,6 +1,10 @@
 package parser
 
-func areSameColours(colours1 colours, colours2 colours) bool {
+import (
+	"github.com/rrethy/hexokinase/internal/models"
+)
+
+func areSameColours(colours1 []*models.Colour, colours2 []*models.Colour) bool {
 	if len(colours1) != len(colours2) {
 		return false
 	}
