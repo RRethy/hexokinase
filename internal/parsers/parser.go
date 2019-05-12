@@ -16,6 +16,7 @@ func Parse(in *os.File, out *os.File) {
 	parsers := [](patParser){
 		parseHex,
 		parseRGB,
+		parseRGBA,
 	}
 
 	lnum := 0
