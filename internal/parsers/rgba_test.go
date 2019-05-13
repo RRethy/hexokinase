@@ -141,7 +141,7 @@ func TestParseRGBA(t *testing.T) {
 	}
 	for _, test := range tests {
 		if got := parseRGBA(test.line); !areSameColours(got, test.want) {
-			t.Errorf(" - %s\n\tgot:    %v\n\twanted: %v", test.line, got, test.want)
+			t.Errorf(" - %s\n\tgot:    %+v\n\twanted: %+v", test.line, got, test.want)
 		}
 	}
 }

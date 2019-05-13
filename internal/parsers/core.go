@@ -12,11 +12,12 @@ type patParser (func(string) []*models.Colour)
 // Read TODO
 func Read(in *os.File) {
 	scanner := bufio.NewScanner(in)
-	var colours []*models.Colour
+	colours := make([]*models.Colour, 0, 4)
 	parsers := [](patParser){
 		parseHex,
 		parseRGB,
 		parseRGBA,
+		parseWebColours,
 	}
 
 	lnum := 0

@@ -121,7 +121,7 @@ func TestParseRGB(t *testing.T) {
 	}
 	for i, test := range tests {
 		if got := parseRGB(test.line); !areSameColours(got, test.want) {
-			t.Errorf("test number: %d\n\tgot:    %v\n\twanted: %v", i+1, got, test.want)
+			t.Errorf("test number: %d\n\tgot:    %+v\n\twanted: %+v", i+1, got, test.want)
 		}
 	}
 }

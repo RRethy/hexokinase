@@ -7,6 +7,6 @@ import (
 )
 
 func main() {
-	output.Out = os.Stdout
+	output.SetOut(os.Stdout)
 	parser.Read(os.Stdin)
 }

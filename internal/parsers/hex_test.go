@@ -65,7 +65,7 @@ func TestParseHex(t *testing.T) {
 	}
 	for i, test := range tests {
 		if got := parseHex(test.line); !areSameColours(got, test.want) {
-			t.Errorf("test number: %d\n\tgot:    %v\n\twanted: %v", i, got, test.want)
+			t.Errorf("test number: %d\n\tgot:    %+v\n\twanted: %+v", i, got, test.want)
 		}
 	}
 }

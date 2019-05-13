@@ -19,10 +19,11 @@ func parseHex(line string) []*models.Colour {
 	var colours []*models.Colour
 	matches := hexPat.FindAllStringIndex(line, -1)
 	for _, match := range matches {
-		colour := new(models.Colour)
-		colour.ColStart = match[0] + 1
-		colour.ColEnd = match[1]
-		colour.Hex = strings.ToLower(toFullHex(line[match[0]:match[1]]))
+		colour := &models.Colour{
+			ColStart: match[0] + 1,
+			ColEnd:   match[1],
+			Hex:      strings.ToLower(toFullHex(line[match[0]:match[1]])),
+		}
 		colours = append(colours, colour)
 	}
 	return colours
