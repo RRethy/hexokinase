@@ -1,10 +1,12 @@
 package main
 
 import (
+	"github.com/rrethy/hexokinase/internal/output"
 	"github.com/rrethy/hexokinase/internal/parsers"
 	"os"
 )
 
 func main() {
-	parser.Parse(os.Stdin, os.Stdout)
+	output.Out = os.Stdout
+	parser.Read(os.Stdin)
 }

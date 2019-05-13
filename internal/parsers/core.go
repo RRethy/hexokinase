@@ -2,15 +2,15 @@ package parser
 
 import (
 	"bufio"
-	"fmt"
 	"github.com/rrethy/hexokinase/internal/models"
+	"github.com/rrethy/hexokinase/internal/output"
 	"os"
 )
 
-type patParser (func(string, int) []*models.Colour)
+type patParser (func(string) []*models.Colour)
 
-// Parse TODO
-func Parse(in *os.File, out *os.File) {
+// Read TODO
+func Read(in *os.File) {
 	scanner := bufio.NewScanner(in)
 	var colours []*models.Colour
 	parsers := [](patParser){
@@ -23,12 +23,15 @@ func Parse(in *os.File, out *os.File) {
 	for scanner.Scan() {
 		lnum++
 		for _, parser := range parsers {
-			colours = append(colours, parser(scanner.Text(), lnum)...)
+			lineColours := parser(scanner.Text())
+			for _, colour := range lineColours {
+				colour.Lnum = lnum
+			}
+			colours = append(colours, lineColours...)
 		}
 	}
 
 	for _, colour := range colours {
-		fmt.Fprintf(out, "%d:%d-%d:%s\n",
-			colour.Lnum, colour.ColStart, colour.ColEnd, colour.Hex)
+		output.PrintColour(colour)
 	}
 }

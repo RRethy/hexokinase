@@ -31,7 +31,6 @@ func areSameColours(colours1 []*models.Colour, colours2 []*models.Colour) bool {
 		colour2 := colours2[i]
 		if colour1.ColStart != colour2.ColStart ||
 			colour1.ColEnd != colour2.ColEnd ||
-			colour1.Lnum != colour2.Lnum ||
 			colour1.Hex != colour2.Hex {
 			return false
 		}
