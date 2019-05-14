@@ -8,10 +8,7 @@ import (
 )
 
 func TestParseWebColours(t *testing.T) {
-	var tests = []struct {
-		line string
-		want colours
-	}{
+	var tests = []testData{
 		// test various values
 		{"aliceblue", []*models.Colour{
 			&models.Colour{ColStart: 1, ColEnd: 9, Hex: "#f0f8ff"},
@@ -56,11 +53,7 @@ func TestParseWebColours(t *testing.T) {
 			&models.Colour{ColStart: 6, ColEnd: 9, Hex: "#808080"},
 		}},
 	}
-	for i, test := range tests {
-		if got := parseWebColours(test.line); !areSameColours(got, test.want) {
-			t.Errorf("test number: %d\n\tgot:    %+v\n\twanted: %+v", i, got, test.want)
-		}
-	}
+	runTests("TestParseWebColours", t, tests, parseWebColours)
 }
 
 func BenchmarkParseWebColours(b *testing.B) {

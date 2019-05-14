@@ -6,10 +6,7 @@ import (
 )
 
 func TestParseRGBA(t *testing.T) {
-	var tests = []struct {
-		line string
-		want colours
-	}{
+	var tests = []testData{
 		{"rgba(0,0,0,1)", []*models.Colour{
 			&models.Colour{ColStart: 1, ColEnd: 13, Hex: "#000000"},
 		}},
@@ -139,9 +136,5 @@ func TestParseRGBA(t *testing.T) {
 			&models.Colour{ColStart: 1, ColEnd: 21, Hex: "#000000"},
 		}},
 	}
-	for _, test := range tests {
-		if got := parseRGBA(test.line); !areSameColours(got, test.want) {
-			t.Errorf(" - %s\n\tgot:    %+v\n\twanted: %+v", test.line, got, test.want)
-		}
-	}
+	runTests("TestParseRGBA", t, tests, parseRGBA)
 }

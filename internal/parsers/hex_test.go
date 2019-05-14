@@ -8,10 +8,7 @@ import (
 type colours []*models.Colour
 
 func TestParseHex(t *testing.T) {
-	var tests = []struct {
-		line string
-		want colours
-	}{
+	var tests = []testData{
 		// test various values
 		{" #fff ", []*models.Colour{
 			&models.Colour{ColStart: 2, ColEnd: 5, Hex: "#ffffff"},
@@ -63,9 +60,5 @@ func TestParseHex(t *testing.T) {
 			&models.Colour{ColStart: 28, ColEnd: 31, Lnum: 0, Hex: "#000000"},
 		}},
 	}
-	for i, test := range tests {
-		if got := parseHex(test.line); !areSameColours(got, test.want) {
-			t.Errorf("test number: %d\n\tgot:    %+v\n\twanted: %+v", i, got, test.want)
-		}
-	}
+	runTests("TestParseHex", t, tests, parseHex)
 }
