@@ -61,3 +61,7 @@ func setAlpha(r, g, b int, alpha float64) (int, int, int) {
 	newB := int(float64(b)*alpha + float64(bgRGB[2])*(1.0-alpha))
 	return newR, newG, newB
 }
+
+func hslToHex(h, s, l int) string {
+	return "#ffffff"
+}
