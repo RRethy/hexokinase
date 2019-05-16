@@ -1,8 +1,7 @@
-package parser
+package main
 
 import (
 	"fmt"
-	"github.com/rrethy/hexokinase/internal/models"
 	"regexp"
 	"strings"
 )
@@ -15,11 +14,11 @@ var (
 	hexPat = regexp.MustCompile(fmt.Sprintf("#(?:%s{6}|%[1]s{3})", hexDigit))
 )
 
-func parseHex(line string) []*models.Colour {
-	var colours []*models.Colour
+func parseHex(line string) []*Colour {
+	var colours []*Colour
 	matches := hexPat.FindAllStringIndex(line, -1)
 	for _, match := range matches {
-		colour := &models.Colour{
+		colour := &Colour{
 			ColStart: match[0] + 1,
 			ColEnd:   match[1],
 			Hex:      strings.ToLower(toFullHex(line[match[0]:match[1]])),

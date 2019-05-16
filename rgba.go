@@ -1,8 +1,7 @@
-package parser
+package main
 
 import (
 	"fmt"
-	"github.com/rrethy/hexokinase/internal/models"
 	"regexp"
 	"strconv"
 )
@@ -15,8 +14,8 @@ var (
 	rgbaPat = regexp.MustCompile(fmt.Sprintf(`rgba\(\s*(%s)\s*,\s*(%[1]s)\s*,\s*(%[1]s)\s*,\s*(%s)\s*\)`, funcParam, alphaPat))
 )
 
-func parseRGBA(line string) []*models.Colour {
-	var colours []*models.Colour
+func parseRGBA(line string) []*Colour {
+	var colours []*Colour
 	matches := rgbaPat.FindAllStringSubmatchIndex(line, -1)
 	for _, match := range matches {
 		r, err := strToDec(line[match[2]:match[3]])
@@ -26,7 +25,7 @@ func parseRGBA(line string) []*models.Colour {
 		if err != nil {
 			continue
 		}
-		colour := &models.Colour{
+		colour := &Colour{
 			ColStart: match[0] + 1,
 			ColEnd:   match[1],
 			Hex:      rgbToHex(setAlpha(r, g, b, alpha)),

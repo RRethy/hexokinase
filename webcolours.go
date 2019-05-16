@@ -1,7 +1,6 @@
-package parser
+package main
 
 import (
-	"github.com/rrethy/hexokinase/internal/models"
 	"strings"
 )
 
@@ -162,8 +161,8 @@ var (
 	}
 )
 
-func parseWebColours(line string) []*models.Colour {
-	var colours []*models.Colour
+func parseWebColours(line string) []*Colour {
+	var colours []*Colour
 	used := make([]bool, len(line))
 	line = strings.ToLower(line)
 	for _, tuple := range webColours {
@@ -173,7 +172,7 @@ func parseWebColours(line string) []*models.Colour {
 			index := strings.Index(curLine, tuple[0])
 			if index != -1 {
 				if !used[offset+index] {
-					colour := &models.Colour{
+					colour := &Colour{
 						ColStart: offset + index + 1,
 						ColEnd:   offset + index + len(tuple[0]),
 						Hex:      tuple[1],

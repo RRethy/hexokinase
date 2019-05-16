@@ -1,7 +1,6 @@
-package parser
+package main
 
 import (
-	"github.com/rrethy/hexokinase/internal/models"
 	"testing"
 )
 
@@ -10,7 +9,7 @@ type testData struct {
 	want colours
 }
 
-func runTests(tag string, t *testing.T, tests []testData, fun func(string) []*models.Colour) {
+func runTests(tag string, t *testing.T, tests []testData, fun func(string) []*Colour) {
 	for _, test := range tests {
 		if got := fun(test.line); !areSameColours(got, test.want) {
 			t.Errorf(`
@@ -22,7 +21,7 @@ Wanted: %+v`, tag, test.line, got, test.want)
 	}
 }
 
-func areSameColours(colours1 []*models.Colour, colours2 []*models.Colour) bool {
+func areSameColours(colours1 []*Colour, colours2 []*Colour) bool {
 	if len(colours1) != len(colours2) {
 		return false
 	}

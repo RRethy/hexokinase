@@ -1,8 +1,7 @@
-package parser
+package main
 
 import (
 	"fmt"
-	"github.com/rrethy/hexokinase/internal/models"
 	"regexp"
 	"strconv"
 )
@@ -15,8 +14,8 @@ var (
 	hslPat = regexp.MustCompile(fmt.Sprintf(`hsl\(\s*(%s)\s*,\s*(%s)\s*,\s*(%[2]s)\s*\)`, validHue, percentage))
 )
 
-func parseHSL(line string) []*models.Colour {
-	var colours []*models.Colour
+func parseHSL(line string) []*Colour {
+	var colours []*Colour
 	matches := hslPat.FindAllStringSubmatchIndex(line, -1)
 	for _, match := range matches {
 		h, err := strconv.Atoi(line[match[2]:match[3]])
@@ -25,7 +24,7 @@ func parseHSL(line string) []*models.Colour {
 		if err != nil {
 			continue
 		}
-		colour := &models.Colour{
+		colour := &Colour{
 			ColStart: match[0] + 1,
 			ColEnd:   match[1],
 			Hex:      hslToHex(h, s, l),

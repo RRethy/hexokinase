@@ -1,18 +1,16 @@
-package parser
+package main
 
 import (
 	"bufio"
-	"github.com/rrethy/hexokinase/internal/models"
-	"github.com/rrethy/hexokinase/internal/output"
 	"os"
 )
 
-type patParser (func(string) []*models.Colour)
+type patParser (func(string) []*Colour)
 
 // Read TODO
 func Read(in *os.File) {
 	scanner := bufio.NewScanner(in)
-	colours := make([]*models.Colour, 0, 4)
+	colours := make([]*Colour, 0, 4)
 	parsers := [](patParser){
 		parseHex,
 		parseRGB,
@@ -33,6 +31,6 @@ func Read(in *os.File) {
 	}
 
 	for _, colour := range colours {
-		output.PrintColour(colour)
+		PrintColour(colour)
 	}
 }

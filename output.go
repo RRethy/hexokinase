@@ -1,8 +1,7 @@
-package output
+package main
 
 import (
 	"fmt"
-	"github.com/rrethy/hexokinase/internal/models"
 	"os"
 )
 
@@ -17,6 +16,6 @@ func SetOut(f *os.File) {
 }
 
 // PrintColour TODO
-func PrintColour(c *models.Colour) {
+func PrintColour(c *Colour) {
 	fmt.Fprintf(out, "%d:%d-%d:%s\n", c.Lnum, c.ColStart, c.ColEnd, c.Hex)
 }
