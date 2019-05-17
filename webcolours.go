@@ -159,10 +159,15 @@ var (
 		[2]string{"red", "#ff0000"},
 		[2]string{"tan", "#d2b48c"},
 	}
+	webColoursDisabled = false
 )
 
-func parseWebColours(line string) []*Colour {
-	var colours []*Colour
+func parseWebColours(line string) colours {
+	var colours []Colour
+	if webColoursDisabled {
+		return colours
+	}
+
 	used := make([]bool, len(line))
 	line = strings.ToLower(line)
 	for _, tuple := range webColours {
@@ -172,10 +177,11 @@ func parseWebColours(line string) []*Colour {
 			index := strings.Index(curLine, tuple[0])
 			if index != -1 {
 				if !used[offset+index] {
-					colour := &Colour{
+					colour := Colour{
 						ColStart: offset + index + 1,
 						ColEnd:   offset + index + len(tuple[0]),
 						Hex:      tuple[1],
+						Line:     line,
 					}
 					colours = append(colours, colour)
 					for i := offset + index; i < offset+index+len(tuple[0]); i++ {

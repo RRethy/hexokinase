@@ -7,12 +7,17 @@ import (
 )
 
 var (
-	rgbaPat = regexp.MustCompile(fmt.Sprintf(`rgba\(\s*(%s)\s*,\s*(%[1]s)\s*,\s*(%[1]s)\s*,\s*(%s)\s*\)`, funcParam, alphaPat))
+	rgbaFunc     = regexp.MustCompile(fmt.Sprintf(`rgba\(\s*(%s)\s*,\s*(%[1]s)\s*,\s*(%[1]s)\s*,\s*(%s)\s*\)`, rgbFuncParam, alphaPat))
+	rgbaDisabled = false
 )
 
-func parseRGBA(line string) []*Colour {
-	var colours []*Colour
-	matches := rgbaPat.FindAllStringSubmatchIndex(line, -1)
+func parseRGBA(line string) colours {
+	var colours []Colour
+	if rgbaDisabled {
+		return colours
+	}
+
+	matches := rgbaFunc.FindAllStringSubmatchIndex(line, -1)
 	for _, match := range matches {
 		r, err := strToDec(line[match[2]:match[3]])
 		g, err := strToDec(line[match[4]:match[5]])
@@ -21,10 +26,11 @@ func parseRGBA(line string) []*Colour {
 		if err != nil {
 			continue
 		}
-		colour := &Colour{
+		colour := Colour{
 			ColStart: match[0] + 1,
 			ColEnd:   match[1],
-			Hex:      rgbToHex(setAlpha(r, g, b, alpha)),
+			Hex:      rgbaToHex(r, g, b, alpha),
+			Line:     line,
 		}
 		colours = append(colours, colour)
 	}

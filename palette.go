@@ -2,9 +2,8 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
+	"errors"
 	"io/ioutil"
-	"os"
 	"regexp"
 	"strings"
 )
@@ -23,28 +22,55 @@ func (p *palette) compileRegex() {
 
 var (
 	palettes []*palette
+
+	// ErrIncompletePalette indicates that a palette file does not have the
+	// required key "colour_table"
+	ErrIncompletePalette = errors.New(`palette missing required "colour_table" key`)
 )
 
-func initializePalettes(fnames ...string) {
+// A PaletteError records an unsuccessful attempt to load a palette file
+type PaletteError struct {
+	Func  string // the failing function (LoadPalettes, etc.)
+	Fname string //the file name of the palette
+	Err   error  // the reason for failure
+}
+
+func (e *PaletteError) Error() string {
+	return "hexokinase." + e.Func + ": " + "loading palette " + e.Fname + ": " + e.Err.Error()
+}
+
+// LoadPalettes reads the files in fnames and loads them as a palette if they are valid.
+func LoadPalettes(fnames ...string) []error {
+	const fnLoadPalettes = "LoadPalettes"
+
+	var errs []error
 	for _, fname := range fnames {
 		file, err := ioutil.ReadFile(fname)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s - %v\n", fname, err)
+			errs = append(errs, &PaletteError{fnLoadPalettes, fname, err})
 			continue
 		}
+
 		p := &palette{}
 		err = json.Unmarshal(file, &p)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %v\n", fname, err)
+			errs = append(errs, &PaletteError{fnLoadPalettes, fname, err})
 			continue
 		}
+
+		if len(p.ColourPairs) == 0 {
+			errs = append(errs, &PaletteError{fnLoadPalettes, fname, ErrIncompletePalette})
+			continue
+		}
+
 		p.compileRegex()
 		palettes = append(palettes, p)
 	}
+	return errs
 }
 
-func parsePalettes(line string) []*Colour {
-	var colours []*Colour
+func parsePalettes(line string) colours {
+	var colours []Colour
 	if len(palettes) == 0 {
 		return colours
 	}
@@ -56,18 +82,19 @@ func parsePalettes(line string) []*Colour {
 	return colours
 }
 
-func parsePalette(line string, p *palette) []*Colour {
-	var colours []*Colour
+func parsePalette(line string, p *palette) []Colour {
+	var colours []Colour
 
 	if p.compiledRegex != nil {
 		matches := p.compiledRegex.FindAllStringIndex(line, -1)
 		for _, match := range matches {
 			name := line[match[0]:match[1]]
 			if hex, ok := p.ColourPairs[name]; ok {
-				colour := &Colour{
+				colour := Colour{
 					ColStart: match[0] + 1,
 					ColEnd:   match[1],
 					Hex:      hex,
+					Line:     line,
 				}
 				colours = append(colours, colour)
 			}
@@ -79,10 +106,11 @@ func parsePalette(line string, p *palette) []*Colour {
 				offset := len(line) - len(curLine)
 				index := strings.Index(curLine, name)
 				if index != -1 {
-					colour := &Colour{
+					colour := Colour{
 						ColStart: offset + index + 1,
 						ColEnd:   offset + index + len(name),
 						Hex:      hex,
+						Line:     line,
 					}
 					colours = append(colours, colour)
 					curLine = curLine[index+len(name):]

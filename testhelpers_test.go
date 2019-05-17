@@ -9,7 +9,7 @@ type testData struct {
 	want colours
 }
 
-func runTests(tag string, t *testing.T, tests []testData, fun func(string) []*Colour) {
+func runTests(tag string, t *testing.T, tests []testData, fun func(string) colours) {
 	for _, test := range tests {
 		if got := fun(test.line); !areSameColours(got, test.want) {
 			t.Errorf(`
@@ -21,7 +21,7 @@ Wanted: %+v`, tag, test.line, got, test.want)
 	}
 }
 
-func areSameColours(colours1 []*Colour, colours2 []*Colour) bool {
+func areSameColours(colours1 colours, colours2 colours) bool {
 	if len(colours1) != len(colours2) {
 		return false
 	}

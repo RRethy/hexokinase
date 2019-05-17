@@ -7,12 +7,17 @@ import (
 )
 
 var (
-	hslaPat = regexp.MustCompile(fmt.Sprintf(`hsla\(\s*(%s)\s*,\s*(%s)\s*,\s*(%[2]s)\s*,\s*(%s)\s*\)`, validHue, percentage, alphaPat))
+	hslaFunc     = regexp.MustCompile(fmt.Sprintf(`hsla\(\s*(%s)\s*,\s*(%s)\s*,\s*(%[2]s)\s*,\s*(%s)\s*\)`, validHue, percentage, alphaPat))
+	hslaDisabled = false
 )
 
-func parseHSLA(line string) []*Colour {
-	var colours []*Colour
-	matches := hslaPat.FindAllStringSubmatchIndex(line, -1)
+func parseHSLA(line string) colours {
+	var colours []Colour
+	if hslaDisabled {
+		return colours
+	}
+
+	matches := hslaFunc.FindAllStringSubmatchIndex(line, -1)
 	for _, match := range matches {
 		h, err := strconv.ParseFloat(line[match[2]:match[3]], 64)
 		s, err := percentageStrToInt(line[match[4]:match[5]])
@@ -21,10 +26,11 @@ func parseHSLA(line string) []*Colour {
 		if err != nil {
 			continue
 		}
-		colour := &Colour{
+		colour := Colour{
 			ColStart: match[0] + 1,
 			ColEnd:   match[1],
-			Hex:      rgbToHex(hslaToRGB(float64(int(h)%360), float64(s)/100, float64(l)/100, alpha)),
+			Hex:      hslaToHex(float64(int(h)%360), float64(s)/100, float64(l)/100, alpha),
+			Line:     line,
 		}
 		colours = append(colours, colour)
 	}

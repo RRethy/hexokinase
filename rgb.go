@@ -6,12 +6,17 @@ import (
 )
 
 var (
-	rgbPat = regexp.MustCompile(fmt.Sprintf(`rgb\(\s*(%s)\s*,\s*(%[1]s)\s*,\s*(%[1]s)\s*\)`, funcParam))
+	rgbFunc     = regexp.MustCompile(fmt.Sprintf(`rgb\(\s*(%s)\s*,\s*(%[1]s)\s*,\s*(%[1]s)\s*\)`, rgbFuncParam))
+	rgbDisabled = false
 )
 
-func parseRGB(line string) []*Colour {
-	var colours []*Colour
-	matches := rgbPat.FindAllStringSubmatchIndex(line, -1)
+func parseRGB(line string) colours {
+	var colours []Colour
+	if rgbDisabled {
+		return colours
+	}
+
+	matches := rgbFunc.FindAllStringSubmatchIndex(line, -1)
 	for _, match := range matches {
 		r, err := strToDec(line[match[2]:match[3]])
 		g, err := strToDec(line[match[4]:match[5]])
@@ -19,10 +24,11 @@ func parseRGB(line string) []*Colour {
 		if err != nil {
 			continue
 		}
-		colour := &Colour{
+		colour := Colour{
 			ColStart: match[0] + 1,
 			ColEnd:   match[1],
 			Hex:      rgbToHex(r, g, b),
+			Line:     line,
 		}
 		colours = append(colours, colour)
 	}

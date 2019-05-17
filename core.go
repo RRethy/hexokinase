@@ -3,15 +3,14 @@ package main
 import (
 	"bufio"
 	"os"
+	"sort"
 )
 
-type patParser (func(string) []*Colour)
-
-// Read TODO
-func Read(in *os.File) {
+// parseFile returns all colours matched when parsing in
+func parseFile(in *os.File) colours {
 	scanner := bufio.NewScanner(in)
-	colours := make([]*Colour, 0, 4)
-	parsers := [](patParser){
+	colours := make(colours, 0, 4)
+	parsers := []parser{
 		parseHex,
 		parseRGB,
 		parseRGBA,
@@ -29,11 +28,12 @@ func Read(in *os.File) {
 			for _, colour := range lineColours {
 				colour.Lnum = lnum
 			}
+
 			colours = append(colours, lineColours...)
 		}
 	}
 
-	for _, colour := range colours {
-		PrintColour(colour)
-	}
+	sort.Sort(colours)
+
+	return colours
 }

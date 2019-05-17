@@ -15,7 +15,8 @@ func SetOut(f *os.File) {
 	out = f
 }
 
-// PrintColour TODO
-func PrintColour(c *Colour) {
-	fmt.Fprintf(out, "%d:%d-%d:%s\n", c.Lnum, c.ColStart, c.ColEnd, c.Hex)
+func printColours(clrs colours) {
+	for _, colour := range clrs {
+		fmt.Fprintf(out, "%d:%d-%d:%s:%s\n", colour.Lnum, colour.ColStart, colour.ColEnd, colour.Hex, colour.Line)
+	}
 }
