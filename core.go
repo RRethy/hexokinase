@@ -15,6 +15,7 @@ func Read(in *os.File) {
 		parseHex,
 		parseRGB,
 		parseRGBA,
+		parseHSL,
 		parseWebColours,
 	}
 

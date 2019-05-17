@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	validHue = "3(?:[0-5][0-9]|60)|[0-2]?[0-9]?[0-9]"
+	validHue = "[0-9]{1,4}"
 )
 
 var (
@@ -19,15 +19,15 @@ func parseHSL(line string) []*Colour {
 	matches := hslPat.FindAllStringSubmatchIndex(line, -1)
 	for _, match := range matches {
 		h, err := strconv.Atoi(line[match[2]:match[3]])
-		s, err := strToDec(line[match[4]:match[5]])
-		l, err := strToDec(line[match[4]:match[5]])
+		s, err := percentageStrToInt(line[match[4]:match[5]])
+		l, err := percentageStrToInt(line[match[6]:match[7]])
 		if err != nil {
 			continue
 		}
 		colour := &Colour{
 			ColStart: match[0] + 1,
 			ColEnd:   match[1],
-			Hex:      hslToHex(h, s, l),
+			Hex:      hslToHex(float64(h%360), float64(s)/100, float64(l)/100),
 		}
 		colours = append(colours, colour)
 	}
