@@ -1,0 +1,8 @@
+{
+  "regex_pattern": "foo[0-9]bar[0-9]baz[0-9]",
+  "colour_table": {
+    "foo1bar1baz1": "#eb00ff",
+    "foo2bar2baz2": "#ffeb00",
+    "foo3bar3baz3": "#00ffeb"
+  }
+}
