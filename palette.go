@@ -73,21 +73,18 @@ func parsePalette(line string, p *palette) []*Colour {
 			}
 		}
 	} else {
-		used := make([]bool, len(line))
 		for name, hex := range p.ColourPairs {
 			curLine := line
 			for len(curLine) > 0 {
 				offset := len(line) - len(curLine)
 				index := strings.Index(curLine, name)
 				if index != -1 {
-					if !used[offset+index] {
-						colour := &Colour{
-							ColStart: offset + index + 1,
-							ColEnd:   offset + index + len(name),
-							Hex:      hex,
-						}
-						colours = append(colours, colour)
+					colour := &Colour{
+						ColStart: offset + index + 1,
+						ColEnd:   offset + index + len(name),
+						Hex:      hex,
 					}
+					colours = append(colours, colour)
 					curLine = curLine[index+len(name):]
 				} else {
 					break
