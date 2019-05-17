@@ -12,6 +12,9 @@ func TestParseRGB(t *testing.T) {
 		{"rgb(176,253,35)", []*Colour{
 			&Colour{ColStart: 1, ColEnd: 15, Hex: "#b0fd23"},
 		}},
+		{"rgb(176.99,253.12,35.99)", []*Colour{
+			&Colour{ColStart: 1, ColEnd: 24, Hex: "#b0fd23"},
+		}},
 
 		// test percentages
 		{"rgb(0%,253,35)", []*Colour{

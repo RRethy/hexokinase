@@ -6,6 +6,12 @@ import (
 
 func TestParseHSL(t *testing.T) {
 	var tests = []testData{
+		{" hsl(195, 75.7%, 50.4%) ", []*Colour{
+			&Colour{ColStart: 2, ColEnd: 23, Hex: "#1fafdf"},
+		}},
+		{" hsl(195, 75%, 50%) ", []*Colour{
+			&Colour{ColStart: 2, ColEnd: 19, Hex: "#1fafdf"},
+		}},
 		{" hsl(195, 100%, 50%) ", []*Colour{
 			&Colour{ColStart: 2, ColEnd: 20, Hex: "#00bfff"},
 		}},

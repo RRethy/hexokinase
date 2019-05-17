@@ -7,10 +7,10 @@ import (
 
 const (
 	validHue   = `[0-9]{1,4}(?:\.[0-9]{1,2})?`
-	num0to255  = "2(?:[0-4][0-9]|5[0-5])|1?[0-9]?[0-9]"
-	percentage = "1?[0-9]{0,2}%"
-	alphaPat   = "(?:0|1)?(?:.[0-9]+)?"
-	funcParam  = "(?:(?:" + num0to255 + ")|(?:" + percentage + "))"
+	num0to255  = `(?:2(?:[0-4][0-9]|5[0-5])|1?[0-9]?[0-9])(?:\.[0-9]{1,2})?`
+	percentage = `1?[0-9]{1,2}(?:\.[0-9]{1,2})?%`
+	alphaPat   = `(?:0|1)?(?:\.[0-9]{1,2})?`
+	funcParam  = `(?:(?:` + num0to255 + `)|(?:` + percentage + `))`
 )
 
 var (
@@ -23,19 +23,22 @@ func SetBG(hex string) {
 	bgRGB = []int{r, g, b}
 }
 
+// TODO
 func percentageStrToInt(perStr string) (int, error) {
-	return strconv.Atoi(perStr[:len(perStr)-1])
+	num, err := strconv.ParseFloat(perStr[:len(perStr)-1], 64)
+	return int(num), err
 }
 
 func strToDec(str string) (int, error) {
 	if str[len(str)-1] == '%' {
-		num, err := strconv.Atoi(str[:len(str)-1])
+		num, err := strconv.ParseFloat(str[:len(str)-1], 64)
 		if err != nil {
 			return 0, err
 		}
-		return num * 255 / 100, nil
+		return int(num) * 255 / 100, nil
 	}
-	return strconv.Atoi(str)
+	num, err := strconv.ParseFloat(str, 64)
+	return int(num), err
 }
 
 func rgbToHex(r, g, b int) string {
