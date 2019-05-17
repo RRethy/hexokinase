@@ -6,10 +6,6 @@ import (
 	"strconv"
 )
 
-const (
-	alphaPat = "(?:0|1)?(?:.[0-9]+)?"
-)
-
 var (
 	rgbaPat = regexp.MustCompile(fmt.Sprintf(`rgba\(\s*(%s)\s*,\s*(%[1]s)\s*,\s*(%[1]s)\s*,\s*(%s)\s*\)`, funcParam, alphaPat))
 )

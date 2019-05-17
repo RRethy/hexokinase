@@ -6,8 +6,10 @@ import (
 )
 
 const (
+	validHue   = `[0-9]{1,4}(?:\.[0-9]{1,2})?`
 	num0to255  = "2(?:[0-4][0-9]|5[0-5])|1?[0-9]?[0-9]"
 	percentage = "1?[0-9]{0,2}%"
+	alphaPat   = "(?:0|1)?(?:.[0-9]+)?"
 	funcParam  = "(?:(?:" + num0to255 + ")|(?:" + percentage + "))"
 )
 
@@ -66,11 +68,16 @@ func setAlpha(r, g, b int, alpha float64) (int, int, int) {
 	return newR, newG, newB
 }
 
+func hslaToRGB(h, s, l, alpha float64) (int, int, int) {
+	r, g, b := hslToRGB(h, s, l)
+	return setAlpha(r, g, b, alpha)
+}
+
 // https://github.com/lucasb-eyer/go-colorful/blob/30298f24079860c4dee452fdef6519b362a4a026/colors.go#L229
-func hslToHex(h, s, l float64) string {
+func hslToRGB(h, s, l float64) (int, int, int) {
 	if s == 0 {
 		lInt := int(l * 255)
-		return rgbToHex(lInt, lInt, lInt)
+		return lInt, lInt, lInt
 	}
 
 	var r, g, b float64
@@ -147,5 +154,5 @@ func hslToHex(h, s, l float64) string {
 	rInt := int(r * 255)
 	gInt := int(g * 255)
 	bInt := int(b * 255)
-	return rgbToHex(rInt, gInt, bInt)
+	return rInt, gInt, bInt
 }
