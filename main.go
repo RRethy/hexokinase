@@ -7,10 +7,35 @@ import (
 	"strings"
 )
 
+const (
+	paletteUsage = `
+palette file names.
+This has the ability to define additional patterns to match and how to convert
+them into hex values. The file must be a valid json file that looks like this:
+
+{
+  "regex_pattern": "foo[0-9]bar[0-9]baz[0-9]",
+  "colour_table": {
+    "foo1bar1baz1": "#eb00ff",
+    "foo2bar2baz2": "#ffeb00",
+    "foo3bar3baz3": "#00ffeb"
+  }
+}
+
+The "regex_pattern" key is optional. If omitted, every key in the
+"colour_table" map will be matched instead of using the regex.
+Any key in the "colour_table" map will be matched and have the associated hex
+string that is provided outputted.
+If the regex matches a string which is not a key in the "colour_table" map, it
+will be discarded as a false positive.
+No checking is done on the hex strings so technically they can be any string.
+`
+)
+
 var (
-	paletteFnames    = flag.String("palettes", "", "palette file names")
-	fmtShort         = flag.Bool("s", false, "same as -e but don't print the full line. Overrides -e.")
-	fmtExtended      = flag.Bool("e", true, `print results in the format "filename:lnum:colstart-colend:hex:line"`)
+	paletteFnames    = flag.String("palettes", "", paletteUsage)
+	fmtShort         = flag.Bool("simplified", false, "same as -extended but don't print the full line. Overrides -extended.")
+	fmtExtended      = flag.Bool("extended", true, `print results in the format "filename:lnum:colstart-colend:hex:line"`)
 	disabledPatterns = flag.String("dp", "", "disabled patterns which will not be parsed for. Comma separated list\nwith possible values of hex, rgb, rgba, hsl, hsla, names. The \"names\"\nargument refers to web colour names.")
 	fnames           = flag.String("files", "stdout", "files to parse (or stdout to parse stdout)")
 )

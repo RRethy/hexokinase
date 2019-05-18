@@ -21,6 +21,7 @@ const (
 var outputFmt = ExtendedFmt
 
 // SetOutputFmt sets the format to print the colour
+// fmt can be hexokinase.ExtendedFmt or hexokinase.ShortFmt
 func SetOutputFmt(fmt FMT) {
 	outputFmt = fmt
 }
