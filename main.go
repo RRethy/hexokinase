@@ -53,6 +53,10 @@ func main() {
 	}
 
 	for _, pattern := range strings.Split(*disabledPatterns, ",") {
+		if len(pattern) == 0 {
+			continue
+		}
+
 		switch pattern {
 		case "hex":
 			hexDisabled = true
