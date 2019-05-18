@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestPalette(t *testing.T) {
+func TestParsePalettes(t *testing.T) {
 	p1 := &palette{
 		ColourPairs: map[string]string{"foo": "bar", "BING": "BONG"},
 	}

@@ -56,7 +56,7 @@ func TestParseWebColours(t *testing.T) {
 
 func BenchmarkParseWebColours(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		file, err := os.Open("./test_colours.txt")
+		file, err := os.Open("./benchmark_web_colours.txt")
 		if err != nil {
 			b.Errorf("%v\n", err)
 			continue
