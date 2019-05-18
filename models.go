@@ -10,7 +10,7 @@ type rgb struct {
 
 type parser (func(line string) colours)
 
-type colours []Colour
+type colours []*Colour
 
 func (clrs colours) Len() int {
 	return len(clrs)
@@ -34,8 +34,9 @@ type Colour struct {
 	Lnum             int
 	Line             string
 	Hex              string
+	Tag              string
 }
 
 func (c *Colour) String() string {
-	return fmt.Sprintf("%d:%d-%d:%s:%s", c.Lnum, c.ColStart, c.ColEnd, c.Hex, c.Line)
+	return fmt.Sprintf("%s:%d:%d-%d:%s:%s", c.Tag, c.Lnum, c.ColStart, c.ColEnd, c.Hex, c.Line)
 }

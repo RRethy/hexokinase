@@ -163,9 +163,9 @@ var (
 )
 
 func parseWebColours(line string) colours {
-	var colours []Colour
+	var clrs colours
 	if webColoursDisabled {
-		return colours
+		return clrs
 	}
 
 	used := make([]bool, len(line))
@@ -177,13 +177,13 @@ func parseWebColours(line string) colours {
 			index := strings.Index(curLine, tuple[0])
 			if index != -1 {
 				if !used[offset+index] {
-					colour := Colour{
+					colour := &Colour{
 						ColStart: offset + index + 1,
 						ColEnd:   offset + index + len(tuple[0]),
 						Hex:      tuple[1],
 						Line:     line,
 					}
-					colours = append(colours, colour)
+					clrs = append(clrs, colour)
 					for i := offset + index; i < offset+index+len(tuple[0]); i++ {
 						used[i] = true
 					}
@@ -194,5 +194,5 @@ func parseWebColours(line string) colours {
 			}
 		}
 	}
-	return colours
+	return clrs
 }

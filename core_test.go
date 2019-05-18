@@ -12,7 +12,7 @@ func BenchmarkParseFile(b *testing.B) {
 			b.Errorf("%v\n", err)
 			continue
 		}
-		parseFile(file)
+		parseFile(file, "")
 		file.Close()
 	}
 }

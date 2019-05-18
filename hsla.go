@@ -12,9 +12,9 @@ var (
 )
 
 func parseHSLA(line string) colours {
-	var colours []Colour
+	var clrs colours
 	if hslaDisabled {
-		return colours
+		return clrs
 	}
 
 	matches := hslaFunc.FindAllStringSubmatchIndex(line, -1)
@@ -26,13 +26,13 @@ func parseHSLA(line string) colours {
 		if err != nil {
 			continue
 		}
-		colour := Colour{
+		colour := &Colour{
 			ColStart: match[0] + 1,
 			ColEnd:   match[1],
 			Hex:      hslaToHex(float64(int(h)%360), float64(s)/100, float64(l)/100, alpha),
 			Line:     line,
 		}
-		colours = append(colours, colour)
+		clrs = append(clrs, colour)
 	}
-	return colours
+	return clrs
 }

@@ -12,9 +12,9 @@ var (
 )
 
 func parseRGBA(line string) colours {
-	var colours []Colour
+	var clrs colours
 	if rgbaDisabled {
-		return colours
+		return clrs
 	}
 
 	matches := rgbaFunc.FindAllStringSubmatchIndex(line, -1)
@@ -26,13 +26,13 @@ func parseRGBA(line string) colours {
 		if err != nil {
 			continue
 		}
-		colour := Colour{
+		colour := &Colour{
 			ColStart: match[0] + 1,
 			ColEnd:   match[1],
 			Hex:      rgbaToHex(r, g, b, alpha),
 			Line:     line,
 		}
-		colours = append(colours, colour)
+		clrs = append(clrs, colour)
 	}
-	return colours
+	return clrs
 }

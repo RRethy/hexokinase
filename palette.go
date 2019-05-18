@@ -70,33 +70,33 @@ func LoadPalettes(fnames ...string) []error {
 }
 
 func parsePalettes(line string) colours {
-	var colours []Colour
+	var clrs colours
 	if len(palettes) == 0 {
-		return colours
+		return clrs
 	}
 
 	for _, p := range palettes {
-		colours = append(colours, parsePalette(line, p)...)
+		clrs = append(clrs, parsePalette(line, p)...)
 	}
 
-	return colours
+	return clrs
 }
 
-func parsePalette(line string, p *palette) []Colour {
-	var colours []Colour
+func parsePalette(line string, p *palette) colours {
+	var clrs colours
 
 	if p.compiledRegex != nil {
 		matches := p.compiledRegex.FindAllStringIndex(line, -1)
 		for _, match := range matches {
 			name := line[match[0]:match[1]]
 			if hex, ok := p.ColourPairs[name]; ok {
-				colour := Colour{
+				colour := &Colour{
 					ColStart: match[0] + 1,
 					ColEnd:   match[1],
 					Hex:      hex,
 					Line:     line,
 				}
-				colours = append(colours, colour)
+				clrs = append(clrs, colour)
 			}
 		}
 	} else {
@@ -106,13 +106,13 @@ func parsePalette(line string, p *palette) []Colour {
 				offset := len(line) - len(curLine)
 				index := strings.Index(curLine, name)
 				if index != -1 {
-					colour := Colour{
+					colour := &Colour{
 						ColStart: offset + index + 1,
 						ColEnd:   offset + index + len(name),
 						Hex:      hex,
 						Line:     line,
 					}
-					colours = append(colours, colour)
+					clrs = append(clrs, colour)
 					curLine = curLine[index+len(name):]
 				} else {
 					break
@@ -121,5 +121,5 @@ func parsePalette(line string, p *palette) []Colour {
 		}
 	}
 
-	return colours
+	return clrs
 }

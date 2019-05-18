@@ -12,20 +12,20 @@ var (
 )
 
 func parseHex(line string) colours {
-	var colours []Colour
+	var clrs colours
 	if hexDisabled {
-		return colours
+		return clrs
 	}
 
 	matches := hexColour.FindAllStringIndex(line, -1)
 	for _, match := range matches {
-		colour := Colour{
+		colour := &Colour{
 			ColStart: match[0] + 1,
 			ColEnd:   match[1],
 			Hex:      strings.ToLower(toFullHex(line[match[0]:match[1]])),
 			Line:     line,
 		}
-		colours = append(colours, colour)
+		clrs = append(clrs, colour)
 	}
-	return colours
+	return clrs
 }

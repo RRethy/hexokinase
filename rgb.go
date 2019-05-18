@@ -11,9 +11,9 @@ var (
 )
 
 func parseRGB(line string) colours {
-	var colours []Colour
+	var clrs colours
 	if rgbDisabled {
-		return colours
+		return clrs
 	}
 
 	matches := rgbFunc.FindAllStringSubmatchIndex(line, -1)
@@ -24,13 +24,13 @@ func parseRGB(line string) colours {
 		if err != nil {
 			continue
 		}
-		colour := Colour{
+		colour := &Colour{
 			ColStart: match[0] + 1,
 			ColEnd:   match[1],
 			Hex:      rgbToHex(r, g, b),
 			Line:     line,
 		}
-		colours = append(colours, colour)
+		clrs = append(clrs, colour)
 	}
-	return colours
+	return clrs
 }
