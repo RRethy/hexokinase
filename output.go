@@ -28,12 +28,23 @@ func SetOutputFmt(fmt FMT) {
 
 // PrintColours prints clrs to out based on the formatting specificed by
 // SetOutputFmt.
-func PrintColours(clrs colours, out *os.File) {
-	for _, colour := range clrs {
-		if outputFmt == ExtendedFmt {
-			fmt.Fprintf(out, extendedFmt, colour.Tag, colour.Lnum, colour.ColStart, colour.ColEnd, colour.Hex, colour.Line)
-		} else {
-			fmt.Fprintf(out, shortFmt, colour.Tag, colour.Lnum, colour.ColStart, colour.ColEnd, colour.Hex)
+func PrintColours(clrs colours, out *os.File, reverse bool) {
+	if reverse {
+		for i := len(clrs) - 1; i >= 0; i-- {
+			printColour(clrs[i], out)
 		}
+	} else {
+
+		for _, colour := range clrs {
+			printColour(colour, out)
+		}
+	}
+}
+
+func printColour(colour *Colour, out *os.File) {
+	if outputFmt == ExtendedFmt {
+		fmt.Fprintf(out, extendedFmt, colour.Tag, colour.Lnum, colour.ColStart, colour.ColEnd, colour.Hex, colour.Line)
+	} else {
+		fmt.Fprintf(out, shortFmt, colour.Tag, colour.Lnum, colour.ColStart, colour.ColEnd, colour.Hex)
 	}
 }

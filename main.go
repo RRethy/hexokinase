@@ -38,6 +38,7 @@ var (
 	fmtExtended      = flag.Bool("extended", true, `print results in the format "filename:lnum:colstart-colend:hex:line"`)
 	disabledPatterns = flag.String("dp", "", "disabled patterns which will not be parsed for. Comma separated list\nwith possible values of hex, rgb, rgba, hsl, hsla, names. The \"names\"\nargument refers to web colour names.")
 	fnames           = flag.String("files", "stdout", "files to parse (or stdout to parse stdout)")
+	reverse          = flag.Bool("r", false, "reverse output")
 )
 
 func main() {
@@ -97,6 +98,6 @@ func main() {
 		}
 
 		clrs := parseFile(file, fname)
-		PrintColours(clrs, os.Stdout)
+		PrintColours(clrs, os.Stdout, *reverse)
 	}
 }
