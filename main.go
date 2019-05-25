@@ -37,7 +37,7 @@ var (
 	fmtShort         = flag.Bool("simplified", false, "same as -extended but don't print the full line. Overrides -extended.")
 	fmtExtended      = flag.Bool("extended", true, `print results in the format "filename:lnum:colstart-colend:hex:line"`)
 	disabledPatterns = flag.String("dp", "", "disabled patterns which will not be parsed for. Comma separated list\nwith possible values of hex, rgb, rgba, hsl, hsla, names. The \"names\"\nargument refers to web colour names.")
-	fnames           = flag.String("files", "stdout", "files to parse (or stdout to parse stdout)")
+	fnames           = flag.String("files", "stdin", "files to parse (or stdin to parse stdin)")
 	reverse          = flag.Bool("r", false, "reverse output")
 	checkForColour   = flag.String("check", "", "file to check if it contains colour patterns. This will override -fnames. A non-zero exit status indicates no colours found.")
 )
@@ -101,8 +101,8 @@ func main() {
 			var file *os.File
 			var err error
 
-			if fname == "stdout" {
-				file = os.Stdout
+			if fname == "stdin" {
+				file = os.Stdin
 			} else {
 				file, err = os.Open(fname)
 				defer file.Close()
