@@ -39,6 +39,7 @@ var (
 	disabledPatterns = flag.String("dp", "", "disabled patterns which will not be parsed for. Comma separated list\nwith possible values of hex, rgb, rgba, hsl, hsla, names. The \"names\"\nargument refers to web colour names.")
 	fnames           = flag.String("files", "stdout", "files to parse (or stdout to parse stdout)")
 	reverse          = flag.Bool("r", false, "reverse output")
+	checkForColour   = flag.String("check", "", "file to check if it contains colour patterns. This will override -fnames. A non-zero exit status indicates no colours found.")
 )
 
 func main() {
@@ -82,22 +83,37 @@ func main() {
 		SetOutputFmt(ExtendedFmt)
 	}
 
-	for _, fname := range strings.Split(*fnames, ",") {
-		var file *os.File
-		var err error
-
-		if fname == "stdout" {
-			file = os.Stdout
-		} else {
-			file, err = os.Open(fname)
-			defer file.Close()
-		}
+	if len(*checkForColour) > 0 {
+		file, err := os.Open(*checkForColour)
+		defer file.Close()
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%v\n", err)
-			continue
+			os.Exit(1)
 		}
+		clrs := parseFile(file, *checkForColour, 1)
+		if len(clrs) > 0 {
+			os.Exit(0)
+		} else {
+			os.Exit(1)
+		}
+	} else {
+		for _, fname := range strings.Split(*fnames, ",") {
+			var file *os.File
+			var err error
 
-		clrs := parseFile(file, fname)
-		PrintColours(clrs, os.Stdout, *reverse)
+			if fname == "stdout" {
+				file = os.Stdout
+			} else {
+				file, err = os.Open(fname)
+				defer file.Close()
+			}
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "%v\n", err)
+				continue
+			}
+
+			clrs := parseFile(file, fname, -1)
+			PrintColours(clrs, os.Stdout, *reverse)
+		}
 	}
 }

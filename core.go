@@ -8,7 +8,7 @@ import (
 
 // parseFile returns all colours matched when parsing in.
 // tag is attached to each colour.
-func parseFile(in *os.File, tag string) colours {
+func parseFile(in *os.File, tag string, max int) colours {
 	scanner := bufio.NewScanner(in)
 	colours := make(colours, 0, 4)
 	parsers := []parser{
@@ -32,9 +32,15 @@ func parseFile(in *os.File, tag string) colours {
 			}
 			colours = append(colours, lineColours...)
 		}
+		if max != -1 && len(colours) >= max {
+			break
+		}
 	}
 
 	sort.Sort(colours)
+	if max != -1 && len(colours) > max {
+		colours = colours[:max]
+	}
 
 	return colours
 }
