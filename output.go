@@ -34,7 +34,6 @@ func PrintColours(clrs colours, out *os.File, reverse bool) {
 			printColour(clrs[i], out)
 		}
 	} else {
-
 		for _, colour := range clrs {
 			printColour(colour, out)
 		}
