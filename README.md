@@ -68,6 +68,11 @@ hexokinase -files=foo.json,bar.json -palettes=p1.json,p2.json
 
 * [vim-hexokinase](https://github.com/RRethy/vim-hexokinase) - WIP
 
+# TODO
+
+* Cleanup public API
+* Improve README
+
 ## License
 
 `mit`

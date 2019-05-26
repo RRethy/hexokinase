@@ -36,7 +36,7 @@ var (
 	paletteFnames    = flag.String("palettes", "", paletteUsage)
 	fmtShort         = flag.Bool("simplified", false, "same as -extended but don't print the full line. Overrides -extended.")
 	fmtExtended      = flag.Bool("extended", true, `print results in the format "filename:lnum:colstart-colend:hex:line"`)
-	disabledPatterns = flag.String("dp", "", "disabled patterns which will not be parsed for. Comma separated list\nwith possible values of hex, rgb, rgba, hsl, hsla, names. The \"names\"\nargument refers to web colour names.")
+	disabledPatterns = flag.String("dp", "", "disabled patterns which will not be parsed for. Comma separated list\nwith possible values of hex, triplehex, rgb, rgba, hsl, hsla, names. The \"names\"\nargument refers to web colour names.")
 	fnames           = flag.String("files", "stdin", "files to parse (or stdin to parse stdin)")
 	reverse          = flag.Bool("r", false, "reverse output")
 	checkForColour   = flag.String("check", "", "file to check if it contains colour patterns. This will override -fnames. A non-zero exit status indicates no colours found.")
@@ -72,6 +72,8 @@ func main() {
 			hslaDisabled = true
 		case "names":
 			webColoursDisabled = true
+		case "triplehex":
+			setTripleHexDisabled(true)
 		default:
 			fmt.Fprintf(os.Stderr, "Unknown argument to flag -dp: %s", pattern)
 		}

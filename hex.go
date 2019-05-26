@@ -7,9 +7,17 @@ import (
 )
 
 var (
-	hexColour   = regexp.MustCompile(fmt.Sprintf("#(?:%s{6}|%[1]s{3})", hexDigit))
 	hexDisabled = false
+	hexColour   = regexp.MustCompile(fmt.Sprintf("#(?:%s{6}|%[1]s{3})", hexDigit))
 )
+
+func setTripleHexDisabled(disabled bool) {
+	if disabled {
+		hexColour = regexp.MustCompile(fmt.Sprintf("#%s{6}", hexDigit))
+	} else {
+		hexColour = regexp.MustCompile(fmt.Sprintf("#(?:%s{6}|%[1]s{3})", hexDigit))
+	}
+}
 
 func parseHex(line string) colours {
 	var clrs colours
