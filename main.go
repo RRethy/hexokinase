@@ -36,8 +36,8 @@ var (
 	paletteFnames    = flag.String("palettes", "", paletteUsage)
 	fmtShort         = flag.Bool("simplified", false, "same as -extended but don't print the full line. Overrides -extended.")
 	fmtExtended      = flag.Bool("extended", true, `print results in the format "filename:lnum:colstart-colend:hex:line"`)
-	disabledPatterns = flag.String("dp", "", "disabled patterns which will not be parsed for. Comma separated list\nwith possible values of hex, triplehex, rgb, rgba, hsl, hsla, names. The \"names\"\nargument refers to web colour names.")
-	enabledPatterns  = flag.String("ep", "", "enabled patterns which will be parsed for. Comma separated list\nwith possible values of hex, triplehex, rgb, rgba, hsl, hsla, names. The \"names\"\nargument refers to web colour names.")
+	disabledPatterns = flag.String("dp", "", "disabled patterns which will not be parsed for. Comma separated list\nwith possible values of full_hex, triple_hex, rgb, rgba, hsl, hsla, colour_names. The \"names\"\nargument refers to web colour names.")
+	enabledPatterns  = flag.String("ep", "", "enabled patterns which will be parsed for. Comma separated list\nwith possible values of full_hex, triple_hex, rgb, rgba, hsl, hsla, colour_names. The \"names\"\nargument refers to web colour names.")
 	fnames           = flag.String("files", "stdin", "files to parse (or stdin to parse stdin)")
 	reverse          = flag.Bool("r", false, "reverse output")
 	checkForColour   = flag.String("check", "", "file to check if it contains colour patterns. This will override -fnames. A non-zero exit status indicates no colours found.")
@@ -62,7 +62,7 @@ func main() {
 			}
 
 			switch pattern {
-			case "hex":
+			case "full_hex":
 				hexDisabled = true
 			case "rgb":
 				rgbDisabled = true
@@ -72,9 +72,9 @@ func main() {
 				hslDisabled = true
 			case "hsla":
 				hslaDisabled = true
-			case "names":
+			case "colour_names":
 				webColoursDisabled = true
-			case "triplehex":
+			case "triple_hex":
 				setTripleHexDisabled(true)
 			default:
 				fmt.Fprintf(os.Stderr, "Unknown argument to flag -dp: %s", pattern)
@@ -94,7 +94,7 @@ func main() {
 			}
 
 			switch pattern {
-			case "hex":
+			case "full_hex":
 				hexDisabled = false
 			case "rgb":
 				rgbDisabled = false
@@ -104,9 +104,9 @@ func main() {
 				hslDisabled = false
 			case "hsla":
 				hslaDisabled = false
-			case "names":
+			case "colour_names":
 				webColoursDisabled = false
-			case "triplehex":
+			case "triple_hex":
 				setTripleHexDisabled(false)
 			default:
 				fmt.Fprintf(os.Stderr, "Unknown argument to flag -ep: %s", pattern)
