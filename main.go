@@ -9,27 +9,27 @@ import (
 
 const (
 	paletteUsage = `
-palette file names.
-This has the ability to define additional patterns to match and how to convert
-them into hex values. The file must be a valid json file that looks like this:
+    palette file names.
+    This has the ability to define additional patterns to match and how to convert
+    them into hex values. The file must be a valid json file that looks like this:
 
-{
-  "regex_pattern": "foo[0-9]bar[0-9]baz[0-9]",
-  "colour_table": {
-    "foo1bar1baz1": "#eb00ff",
-    "foo2bar2baz2": "#ffeb00",
-    "foo3bar3baz3": "#00ffeb"
-  }
-}
+    {
+        "regex_pattern": "foo[0-9]bar[0-9]baz[0-9]",
+        "colour_table": {
+            "foo1bar1baz1": "#eb00ff",
+            "foo2bar2baz2": "#ffeb00",
+            "foo3bar3baz3": "#00ffeb"
+        }
+    }
 
-The "regex_pattern" key is optional. If omitted, every key in the
-"colour_table" map will be matched instead of using the regex.
-Any key in the "colour_table" map will be matched and have the associated hex
-string that is provided outputted.
-If the regex matches a string which is not a key in the "colour_table" map, it
-will be discarded as a false positive.
-No checking is done on the hex strings so technically they can be any string.
-`
+    The "regex_pattern" key is optional. If omitted, every key in the
+    "colour_table" map will be matched instead of using the regex.
+    Any key in the "colour_table" map will be matched and have the associated hex
+    string that is provided outputted.
+    If the regex matches a string which is not a key in the "colour_table" map, it
+    will be discarded as a false positive.
+    No checking is done on the hex strings so technically they can be any string.
+    `
 )
 
 var (
@@ -37,6 +37,7 @@ var (
 	fmtShort         = flag.Bool("simplified", false, "same as -extended but don't print the full line. Overrides -extended.")
 	fmtExtended      = flag.Bool("extended", true, `print results in the format "filename:lnum:colstart-colend:hex:line"`)
 	disabledPatterns = flag.String("dp", "", "disabled patterns which will not be parsed for. Comma separated list\nwith possible values of hex, triplehex, rgb, rgba, hsl, hsla, names. The \"names\"\nargument refers to web colour names.")
+	enabledPatterns  = flag.String("ep", "", "enabled patterns which will be parsed for. Comma separated list\nwith possible values of hex, triplehex, rgb, rgba, hsl, hsla, names. The \"names\"\nargument refers to web colour names.")
 	fnames           = flag.String("files", "stdin", "files to parse (or stdin to parse stdin)")
 	reverse          = flag.Bool("r", false, "reverse output")
 	checkForColour   = flag.String("check", "", "file to check if it contains colour patterns. This will override -fnames. A non-zero exit status indicates no colours found.")
@@ -54,28 +55,62 @@ func main() {
 		}
 	}
 
-	for _, pattern := range strings.Split(*disabledPatterns, ",") {
-		if len(pattern) == 0 {
-			continue
-		}
+	if len(*disabledPatterns) > 0 {
+		for _, pattern := range strings.Split(*disabledPatterns, ",") {
+			if len(pattern) == 0 {
+				continue
+			}
 
-		switch pattern {
-		case "hex":
-			hexDisabled = true
-		case "rgb":
-			rgbDisabled = true
-		case "rgba":
-			rgbaDisabled = true
-		case "hsl":
-			hslDisabled = true
-		case "hsla":
-			hslaDisabled = true
-		case "names":
-			webColoursDisabled = true
-		case "triplehex":
-			setTripleHexDisabled(true)
-		default:
-			fmt.Fprintf(os.Stderr, "Unknown argument to flag -dp: %s", pattern)
+			switch pattern {
+			case "hex":
+				hexDisabled = true
+			case "rgb":
+				rgbDisabled = true
+			case "rgba":
+				rgbaDisabled = true
+			case "hsl":
+				hslDisabled = true
+			case "hsla":
+				hslaDisabled = true
+			case "names":
+				webColoursDisabled = true
+			case "triplehex":
+				setTripleHexDisabled(true)
+			default:
+				fmt.Fprintf(os.Stderr, "Unknown argument to flag -dp: %s", pattern)
+			}
+		}
+	} else if len(*enabledPatterns) > 0 {
+		hexDisabled = true
+		rgbDisabled = true
+		rgbaDisabled = true
+		hslDisabled = true
+		hslaDisabled = true
+		webColoursDisabled = true
+		setTripleHexDisabled(true)
+		for _, pattern := range strings.Split(*enabledPatterns, ",") {
+			if len(pattern) == 0 {
+				continue
+			}
+
+			switch pattern {
+			case "hex":
+				hexDisabled = false
+			case "rgb":
+				rgbDisabled = false
+			case "rgba":
+				rgbaDisabled = false
+			case "hsl":
+				hslDisabled = false
+			case "hsla":
+				hslaDisabled = false
+			case "names":
+				webColoursDisabled = false
+			case "triplehex":
+				setTripleHexDisabled(false)
+			default:
+				fmt.Fprintf(os.Stderr, "Unknown argument to flag -ep: %s", pattern)
+			}
 		}
 	}
 
