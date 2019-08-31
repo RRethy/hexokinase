@@ -42,12 +42,14 @@ var (
 	reverse          = flag.Bool("r", false, "reverse output")
 	checkForColour   = flag.String("check", "", "file to check if it contains colour patterns. This will override -fnames. A non-zero exit status indicates no colours found.")
 	bgHex            = flag.String("bg", "#ffffff", "background colour used for alpha calculations with rgba and hsla functions.")
+	useBoundaries    = flag.Bool("boundary", false, "TODO")
 )
 
 func main() {
 	flag.Parse()
 
 	SetBgHex(*bgHex)
+	checkBoundary = *useBoundaries
 
 	if len(*paletteFnames) > 0 {
 		errs := LoadPalettes(strings.Split(*paletteFnames, ",")...)
