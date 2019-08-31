@@ -177,15 +177,17 @@ func parseWebColours(line string) colours {
 			index := strings.Index(curLine, tuple[0])
 			if index != -1 {
 				if !used[offset+index] {
-					colour := &Colour{
-						ColStart: offset + index + 1,
-						ColEnd:   offset + index + len(tuple[0]),
-						Hex:      tuple[1],
-						Line:     line,
-					}
-					clrs = append(clrs, colour)
-					for i := offset + index; i < offset+index+len(tuple[0]); i++ {
-						used[i] = true
+					if !checkBoundary || isWord(line, offset+index, offset+index+len(tuple[0])) {
+						colour := &Colour{
+							ColStart: offset + index + 1,
+							ColEnd:   offset + index + len(tuple[0]),
+							Hex:      tuple[1],
+							Line:     line,
+						}
+						clrs = append(clrs, colour)
+						for i := offset + index; i < offset+index+len(tuple[0]); i++ {
+							used[i] = true
+						}
 					}
 				}
 				curLine = curLine[index+len(tuple[0]):]
