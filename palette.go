@@ -90,13 +90,15 @@ func parsePalette(line string, p *palette) colours {
 		for _, match := range matches {
 			name := line[match[0]:match[1]]
 			if hex, ok := p.ColourPairs[name]; ok {
-				colour := &Colour{
-					ColStart: match[0] + 1,
-					ColEnd:   match[1],
-					Hex:      hex,
-					Line:     line,
+				if !checkBoundary || isWord(line, match[0], match[1]) {
+					colour := &Colour{
+						ColStart: match[0] + 1,
+						ColEnd:   match[1],
+						Hex:      hex,
+						Line:     line,
+					}
+					clrs = append(clrs, colour)
 				}
-				clrs = append(clrs, colour)
 			}
 		}
 	} else {
@@ -106,14 +108,16 @@ func parsePalette(line string, p *palette) colours {
 				offset := len(line) - len(curLine)
 				index := strings.Index(curLine, name)
 				if index != -1 {
-					colour := &Colour{
-						ColStart: offset + index + 1,
-						ColEnd:   offset + index + len(name),
-						Hex:      hex,
-						Line:     line,
+					if !checkBoundary || isWord(line, offset+index, offset+index+len(name)) {
+						colour := &Colour{
+							ColStart: offset + index + 1,
+							ColEnd:   offset + index + len(name),
+							Hex:      hex,
+							Line:     line,
+						}
+						clrs = append(clrs, colour)
+						curLine = curLine[index+len(name):]
 					}
-					clrs = append(clrs, colour)
-					curLine = curLine[index+len(name):]
 				} else {
 					break
 				}
