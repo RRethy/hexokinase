@@ -7,6 +7,7 @@ import (
 )
 
 func TestParseWebColours(t *testing.T) {
+	checkBoundary = false
 	var tests = []testData{
 		// test various values
 		{"aliceblue", colours{
