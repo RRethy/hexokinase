@@ -116,8 +116,8 @@ func parsePalette(line string, p *palette) colours {
 							Line:     line,
 						}
 						clrs = append(clrs, colour)
-						curLine = curLine[index+len(name):]
 					}
+					curLine = curLine[index+len(name):]
 				} else {
 					break
 				}
