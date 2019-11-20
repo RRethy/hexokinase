@@ -19,10 +19,9 @@ func (clrs colours) Len() int {
 func (clrs colours) Less(i, j int) bool {
 	clr1 := clrs[i]
 	clr2 := clrs[j]
-	switch {
-	case clr1.Lnum < clr2.Lnum:
-	case clr1.Lnum == clr2.Lnum && clr1.ColStart < clr2.ColStart:
-	case clr1.Lnum == clr2.Lnum && clr1.ColStart == clr2.ColStart && clr1.ColEnd < clr2.ColEnd:
+	if clr1.Lnum < clr2.Lnum ||
+		clr1.Lnum == clr2.Lnum && clr1.ColStart <= clr2.ColStart ||
+		clr1.Lnum == clr2.Lnum && clr1.ColStart == clr2.ColStart && clr1.ColEnd <= clr2.ColEnd {
 		return true
 	}
 	return false

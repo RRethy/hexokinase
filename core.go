@@ -10,7 +10,7 @@ import (
 // tag is attached to each colour.
 func parseFile(in *os.File, tag string, max int) colours {
 	scanner := bufio.NewScanner(in)
-	colours := make(colours, 0, 4)
+	clrs := make(colours, 0, 4)
 	parsers := []parser{
 		parseHex,
 		parseRGB,
@@ -30,17 +30,17 @@ func parseFile(in *os.File, tag string, max int) colours {
 				colour.Lnum = lnum
 				colour.Tag = tag
 			}
-			colours = append(colours, lineColours...)
+			clrs = append(clrs, lineColours...)
 		}
-		if max != -1 && len(colours) >= max {
+		if max != -1 && len(clrs) >= max {
 			break
 		}
 	}
 
-	sort.Sort(colours)
-	if max != -1 && len(colours) > max {
-		colours = colours[:max]
+	sort.Sort(clrs)
+	if max != -1 && len(clrs) > max {
+		clrs = clrs[:max]
 	}
 
-	return colours
+	return clrs
 }
