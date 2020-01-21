@@ -5,15 +5,26 @@ import (
 	"strconv"
 )
 
-// toFullHex returns str if it is a six digit hex (#ffffff), otherwise it will
-// treat str as a three digit hex and convert it to a six digit hex.
-// str MUST be either #\x{3} or #\x{6}.
+// toFullHex returns str if it is a six digit hex (#ffffff | 0xffffff),
+// otherwise it will treat str as a three digit hex and convert it to a six
+// digit hex.
+// str MUST be either [#|0x]\x{3} or [#|0x]\x{6}.
 func toFullHex(str string) string {
-	if len(str) == 7 {
+	switch len(str) {
+	case 8:
+		return fmt.Sprintf("#%c%c%c%c%c%c",
+			str[2], str[3], str[4], str[5], str[6], str[7])
+	case 7:
+		return str
+	case 5:
+		return fmt.Sprintf("#%c%c%c%c%c%c",
+			str[2], str[2], str[3], str[3], str[4], str[4])
+	case 4:
+		return fmt.Sprintf("#%c%c%c%c%c%c",
+			str[1], str[1], str[2], str[2], str[3], str[3])
+	default:
 		return str
 	}
-	return fmt.Sprintf("#%c%c%c%c%c%c",
-		str[1], str[1], str[2], str[2], str[3], str[3])
 }
 
 // percentageStrToInt converts a str formatted as a percentage ("45.5%") into

@@ -13,6 +13,9 @@ func TestParseHex(t *testing.T) {
 		{" #fff ", colours{
 			&Colour{ColStart: 2, ColEnd: 5, Hex: "#ffffff"},
 		}},
+		{" 0xfff ", colours{
+			&Colour{ColStart: 2, ColEnd: 6, Hex: "#ffffff"},
+		}},
 		{" #FFF ", colours{
 			&Colour{ColStart: 2, ColEnd: 5, Hex: "#ffffff"},
 		}},
@@ -30,6 +33,9 @@ func TestParseHex(t *testing.T) {
 		}},
 		{"#a8f9e9", colours{
 			&Colour{ColStart: 1, ColEnd: 7, Hex: "#a8f9e9"},
+		}},
+		{"0xa8f9e9", colours{
+			&Colour{ColStart: 1, ColEnd: 8, Hex: "#a8f9e9"},
 		}},
 
 		// test invalid values
