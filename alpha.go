@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 )
 
 var (
@@ -70,4 +71,10 @@ func withAlpha(r, g, b int, alpha float64) (int, int, int) {
 	newG := int(float64(g)*alpha + float64(bg.g)*(1-alpha))
 	newB := int(float64(b)*alpha + float64(bg.b)*(1-alpha))
 	return newR, newG, newB
+}
+
+func hexWithAlpha(hex string) string {
+	alpha := 1.0
+	c := hexToRGB(fmt.Sprintf("#%s", hex[0:6]))
+	return rgbToHex(withAlpha(c.r, c.g, c.b, alpha))
 }

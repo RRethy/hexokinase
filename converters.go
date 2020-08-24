@@ -11,6 +11,10 @@ import (
 // str MUST be either [#|0x]\x{3} or [#|0x]\x{6}.
 func toFullHex(str string) string {
 	switch len(str) {
+	case 10:
+		return hexWithAlpha(str[2:10])
+	case 9:
+		return hexWithAlpha(str[1:9])
 	case 8:
 		return fmt.Sprintf("#%c%c%c%c%c%c",
 			str[2], str[3], str[4], str[5], str[6], str[7])

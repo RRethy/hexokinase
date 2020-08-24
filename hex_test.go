@@ -28,6 +28,9 @@ func TestParseHex(t *testing.T) {
 		{"	#FFFFFF	", colours{
 			&Colour{ColStart: 2, ColEnd: 8, Hex: "#ffffff"},
 		}},
+		{"	#FFFFFFFF ", colours{
+			&Colour{ColStart: 2, ColEnd: 10, Hex: "#ffffff"},
+		}},
 		{" #A23f23 ", colours{
 			&Colour{ColStart: 2, ColEnd: 8, Hex: "#a23f23"},
 		}},

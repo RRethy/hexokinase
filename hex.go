@@ -8,14 +8,14 @@ import (
 
 var (
 	hexDisabled = false
-	hexColour   = regexp.MustCompile(fmt.Sprintf("(?:#|0x)(?:%s{6}|%[1]s{3})", hexDigit))
+	hexColour   = regexp.MustCompile(fmt.Sprintf("(?:#|0x)(?:%s{8}|%[1]s{6}|%[1]s{3})", hexDigit))
 )
 
 func setTripleHexDisabled(disabled bool) {
 	if disabled {
-		hexColour = regexp.MustCompile(fmt.Sprintf("(?:#|0x)%s{6}", hexDigit))
+		hexColour = regexp.MustCompile(fmt.Sprintf("(?:#|0x)(?:%s{8}|%[1]s{6})", hexDigit))
 	} else {
-		hexColour = regexp.MustCompile(fmt.Sprintf("(?:#|0x)(?:%s{6}|%[1]s{3})", hexDigit))
+		hexColour = regexp.MustCompile(fmt.Sprintf("(?:#|0x)(?:%s{8}|%[1]s{6}|%[1]s{3})", hexDigit))
 	}
 }
 
