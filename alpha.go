@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"strconv"
 )
 
 var (
@@ -74,7 +75,13 @@ func withAlpha(r, g, b int, alpha float64) (int, int, int) {
 }
 
 func hexWithAlpha(hex string) string {
+	hexAlpha, err := strconv.ParseInt(hex[6:8], 16, 32)
 	alpha := 1.0
+	if err != nil {
+		alpha = 1
+	} else {
+		alpha = float64(hexAlpha) / 255
+	}
 	c := hexToRGB(fmt.Sprintf("#%s", hex[0:6]))
 	return rgbToHex(withAlpha(c.r, c.g, c.b, alpha))
 }
