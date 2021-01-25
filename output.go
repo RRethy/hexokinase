@@ -9,13 +9,14 @@ import (
 type FMT int
 
 const (
-	// ExtendedFmt will print the format "filename:lnum:colstart-colend:hex:line"
+	// ExtendedFmt will print the format "filename:lnum:colstart-colend:hex:line" (separator is ; in Windows)
 	ExtendedFmt FMT = iota
-	// ShortFmt will print the format "filename:lnum:colstart-colend:hex"
+	// ShortFmt will print the format "filename:lnum:colstart-colend:hex" (separator is ; in Windows)
 	ShortFmt
 
-	extendedFmt = "%s:%d:%d-%d:%s:%s\n"
-	shortFmt    = "%s:%d:%d-%d:%s\n"
+	sep         = string(os.PathListSeparator)
+	extendedFmt = "%s" + sep + "%d" + sep + "%d-%d" + sep + "%s" + sep + "%s\n"
+	shortFmt    = "%s" + sep + "%d" + sep + "%d-%d" + sep + "%s\n"
 )
 
 var outputFmt = ExtendedFmt

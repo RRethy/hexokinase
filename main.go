@@ -35,7 +35,7 @@ const (
 var (
 	paletteFnames    = flag.String("palettes", "", paletteUsage)
 	fmtShort         = flag.Bool("simplified", false, "same as -extended but don't print the full line. Overrides -extended.")
-	fmtExtended      = flag.Bool("extended", true, `print results in the format "filename:lnum:colstart-colend:hex:line"`)
+	fmtExtended      = flag.Bool("extended", true, `print results in the format "filename`+sep+`lnum`+sep+`colstart-colend`+sep+`hex`+sep+`line"`)
 	disabledPatterns = flag.String("dp", "", "disabled patterns which will not be parsed for. Comma separated list\nwith possible values of full_hex, triple_hex, rgb, rgba, hsl, hsla, colour_names. The \"names\"\nargument refers to web colour names.")
 	enabledPatterns  = flag.String("ep", "", "enabled patterns which will be parsed for. Comma separated list\nwith possible values of full_hex, triple_hex, rgb, rgba, hsl, hsla, colour_names. The \"names\"\nargument refers to web colour names.")
 	fnames           = flag.String("files", "stdin", "files to parse (or stdin to parse stdin)")
